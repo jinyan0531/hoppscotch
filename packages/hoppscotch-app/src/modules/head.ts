@@ -5,7 +5,7 @@ import { HoppModule } from "."
 export default <HoppModule>{
   onVueAppInit(app) {
     const head = createHead({
-      title: `${APP_INFO.name} • ${APP_INFO.shortDescription}`,
+      title: `${APP_INFO.name}`,
       titleTemplate(title) {
         return title === "Hoppscotch" ? title : `${title} • Hoppscotch`
       },

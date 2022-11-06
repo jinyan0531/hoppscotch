@@ -152,7 +152,6 @@ import IconShare2 from "~icons/lucide/share-2"
 import IconChevronRight from "~icons/lucide/chevron-right"
 import { useSetting } from "@composables/settings"
 import { defineActionHandler } from "~/helpers/actions"
-import { showChat } from "@modules/crisp"
 import { useI18n } from "@composables/i18n"
 
 const t = useI18n()
@@ -183,7 +182,6 @@ const emit = defineEmits<{
 }>()
 
 const chatWithUs = () => {
-  showChat()
   hideModal()
 }
 

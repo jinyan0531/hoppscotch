@@ -19,50 +19,7 @@
       <CollectionsChooseType
         :collections-type="collectionsType"
         @update-collection-type="updateCollectionType"
-        @update-selected-team="updateSelectedTeam"
       />
-      <div class="flex justify-between flex-1">
-        <ButtonSecondary
-          v-if="
-            collectionsType.type == 'team-collections' &&
-            (collectionsType.selectedTeam == undefined ||
-              collectionsType.selectedTeam.myRole == 'VIEWER')
-          "
-          v-tippy="{ theme: 'tooltip' }"
-          disabled
-          class="!rounded-none"
-          :icon="IconPlus"
-          :title="t('team.no_access')"
-          :label="t('action.new')"
-        />
-        <ButtonSecondary
-          v-else
-          :icon="IconPlus"
-          :label="t('action.new')"
-          class="!rounded-none"
-          @click="displayModalAdd(true)"
-        />
-        <span class="flex">
-          <ButtonSecondary
-            v-tippy="{ theme: 'tooltip' }"
-            to="https://docs.hoppscotch.io/features/collections"
-            blank
-            :title="t('app.wiki')"
-            :icon="IconHelpCircle"
-          />
-          <ButtonSecondary
-            v-if="!saveRequest"
-            v-tippy="{ theme: 'tooltip' }"
-            :disabled="
-              collectionsType.type == 'team-collections' &&
-              collectionsType.selectedTeam == undefined
-            "
-            :icon="IconArchive"
-            :title="t('modal.import_export')"
-            @click="displayModalImportExport(true)"
-          />
-        </span>
-      </div>
     </div>
     <div class="flex flex-col flex-1">
       <component

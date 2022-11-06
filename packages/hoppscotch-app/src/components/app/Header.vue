@@ -9,33 +9,8 @@
           :label="t('app.name')"
           to="/"
         />
-        <AppGitHubStarButton class="mt-1.5 transition <sm:hidden" />
       </div>
       <div class="inline-flex items-center space-x-2">
-        <ButtonSecondary
-          v-if="showInstallButton"
-          v-tippy="{ theme: 'tooltip' }"
-          :title="t('header.install_pwa')"
-          :icon="IconDownload"
-          class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
-          @click="installPWA()"
-        />
-        <ButtonSecondary
-          v-tippy="{ theme: 'tooltip', allowHTML: true }"
-          :title="`${t('app.search')} <kbd>/</kbd>`"
-          :icon="IconSearch"
-          class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
-          @click="invokeAction('modals.search.toggle')"
-        />
-        <ButtonSecondary
-          v-tippy="{ theme: 'tooltip', allowHTML: true }"
-          :title="`${
-            mdAndLarger ? t('support.title') : t('app.options')
-          } <kbd>?</kbd>`"
-          :icon="IconLifeBuoy"
-          class="rounded hover:bg-primaryDark focus-visible:bg-primaryDark"
-          @click="invokeAction('modals.support.toggle')"
-        />
         <ButtonSecondary
           v-if="currentUser === null"
           :icon="IconUploadCloud"
@@ -156,20 +131,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, reactive, ref } from "vue"
+import { reactive, ref } from "vue"
 import IconUser from "~icons/lucide/user"
 import IconSettings from "~icons/lucide/settings"
-import IconDownload from "~icons/lucide/download"
-import IconSearch from "~icons/lucide/search"
-import IconLifeBuoy from "~icons/lucide/life-buoy"
 import IconUploadCloud from "~icons/lucide/upload-cloud"
 import IconUserPlus from "~icons/lucide/user-plus"
-import { breakpointsTailwind, useBreakpoints, useNetwork } from "@vueuse/core"
-import { pwaDefferedPrompt, installPWA } from "@modules/pwa"
+import { useNetwork } from "@vueuse/core"
 import { probableUser$ } from "@helpers/fb/auth"
 import { useI18n } from "@composables/i18n"
 import { useReadonlyStream } from "@composables/stream"
-import { invokeAction } from "@helpers/actions"
 
 const t = useI18n()
 
@@ -178,14 +148,8 @@ const t = useI18n()
  * that can be called to show the user the installation
  * prompt.
  */
-
-const showInstallButton = computed(() => !!pwaDefferedPrompt.value)
-
 const showLogin = ref(false)
 const showTeamsModal = ref(false)
-
-const breakpoints = useBreakpoints(breakpointsTailwind)
-const mdAndLarger = breakpoints.greater("md")
 
 const network = reactive(useNetwork())
 

@@ -38,14 +38,6 @@
           </div>
         </div>
       </div>
-      <ButtonSecondary
-        :label="t('app.documentation')"
-        to="https://docs.hoppscotch.io/features/response"
-        :icon="IconExternalLink"
-        blank
-        outline
-        reverse
-      />
     </div>
     <div v-else class="flex flex-col flex-1">
       <div
@@ -140,7 +132,6 @@
 </template>
 
 <script setup lang="ts">
-import IconExternalLink from "~icons/lucide/external-link"
 import { computed } from "vue"
 import findStatusGroup from "@helpers/findStatusGroup"
 import type { HoppRESTResponse } from "~/helpers/types/HoppRESTResponse"

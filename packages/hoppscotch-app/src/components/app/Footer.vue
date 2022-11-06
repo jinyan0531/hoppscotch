@@ -22,16 +22,6 @@
           }"
           @click="ZEN_MODE = !ZEN_MODE"
         />
-        <tippy interactive trigger="click" theme="popover">
-          <ButtonSecondary
-            v-tippy="{ theme: 'tooltip' }"
-            :title="t('settings.interceptor')"
-            :icon="IconShieldCheck"
-          />
-          <template #content>
-            <AppInterceptor />
-          </template>
-        </tippy>
       </div>
       <div class="flex">
         <tippy
@@ -40,83 +30,14 @@
           theme="popover"
           :on-shown="() => tippyActions!.focus()"
         >
-          <ButtonSecondary
-            :icon="IconHelpCircle"
-            class="!rounded-none"
-            :label="`${t('app.help')}`"
-          />
           <template #content="{ hide }">
             <div
               ref="tippyActions"
               class="flex flex-col focus:outline-none"
               tabindex="0"
               @keyup.d="documentation.$el.click()"
-              @keyup.s="shortcuts.$el.click()"
-              @keyup.c="chat.$el.click()"
               @keyup.escape="hide()"
             >
-              <SmartItem
-                ref="documentation"
-                :icon="IconBook"
-                :label="`${t('app.documentation')}`"
-                to="https://docs.hoppscotch.io"
-                blank
-                :shortcut="['D']"
-                @click="hide()"
-              />
-              <SmartItem
-                ref="shortcuts"
-                :icon="IconZap"
-                :label="`${t('app.keyboard_shortcuts')}`"
-                :shortcut="['S']"
-                @click="
-                  () => {
-                    showShortcuts = true
-                    hide()
-                  }
-                "
-              />
-              <SmartItem
-                ref="chat"
-                :icon="IconMessageCircle"
-                :label="`${t('app.chat_with_us')}`"
-                :shortcut="['C']"
-                @click="
-                  () => {
-                    chatWithUs()
-                    hide()
-                  }
-                "
-              />
-              <SmartItem
-                :icon="IconGift"
-                :label="`${t('app.whats_new')}`"
-                to="https://docs.hoppscotch.io/changelog"
-                blank
-                @click="hide()"
-              />
-              <SmartItem
-                :icon="IconActivity"
-                :label="t('app.status')"
-                to="https://status.hoppscotch.io"
-                blank
-                @click="hide()"
-              />
-              <hr />
-              <SmartItem
-                :icon="IconGithub"
-                :label="`${t('app.github')}`"
-                to="https://github.com/hoppscotch/hoppscotch"
-                blank
-                @click="hide()"
-              />
-              <SmartItem
-                :icon="IconTwitter"
-                :label="`${t('app.twitter')}`"
-                to="https://hoppscotch.io/twitter"
-                blank
-                @click="hide()"
-              />
               <SmartItem
                 :icon="IconUserPlus"
                 :label="`${t('app.invite')}`"
@@ -148,19 +69,6 @@
             </div>
           </template>
         </tippy>
-        <ButtonSecondary
-          v-tippy="{ theme: 'tooltip' }"
-          :icon="IconZap"
-          :title="t('app.shortcuts')"
-          @click="showShortcuts = true"
-        />
-        <ButtonSecondary
-          v-if="navigatorShare"
-          v-tippy="{ theme: 'tooltip' }"
-          :icon="IconShare2"
-          :title="t('request.share')"
-          @click="nativeShare()"
-        />
         <ButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
           :title="COLUMN_LAYOUT ? t('layout.row') : t('layout.column')"
@@ -197,26 +105,13 @@
 
 <script setup lang="ts">
 import { ref, watch } from "vue"
-import { version } from "~/../package.json"
 import IconSidebar from "~icons/lucide/sidebar"
 import IconMinimize from "~icons/lucide/minimize"
 import IconMaximize from "~icons/lucide/maximize"
-import IconZap from "~icons/lucide/zap"
-import IconShare2 from "~icons/lucide/share-2"
 import IconColumns from "~icons/lucide/columns"
 import IconSidebarOpen from "~icons/lucide/sidebar-open"
-import IconShieldCheck from "~icons/lucide/shield-check"
-import IconHelpCircle from "~icons/lucide/help-circle"
-import IconBook from "~icons/lucide/book"
-import IconMessageCircle from "~icons/lucide/message-circle"
-import IconGift from "~icons/lucide/gift"
-import IconActivity from "~icons/lucide/activity"
-import IconGithub from "~icons/lucide/github"
-import IconTwitter from "~icons/lucide/twitter"
 import IconUserPlus from "~icons/lucide/user-plus"
 import IconLock from "~icons/lucide/lock"
-import { defineActionHandler } from "~/helpers/actions"
-import { showChat } from "@modules/crisp"
 import { useSetting } from "@composables/settings"
 import { useI18n } from "@composables/i18n"
 import { useReadonlyStream } from "@composables/stream"
@@ -225,25 +120,12 @@ import { TippyComponent } from "vue-tippy"
 import SmartItem from "@components/smart/Item.vue"
 
 const t = useI18n()
-const showShortcuts = ref(false)
-const showShare = ref(false)
 const showDeveloperOptions = ref(false)
-
-defineActionHandler("flyouts.keybinds.toggle", () => {
-  showShortcuts.value = !showShortcuts.value
-})
-
-defineActionHandler("modals.share.toggle", () => {
-  showShare.value = !showShare.value
-})
-
 const EXPAND_NAVIGATION = useSetting("EXPAND_NAVIGATION")
 const SIDEBAR = useSetting("SIDEBAR")
 const ZEN_MODE = useSetting("ZEN_MODE")
 const COLUMN_LAYOUT = useSetting("COLUMN_LAYOUT")
 const SIDEBAR_ON_LEFT = useSetting("SIDEBAR_ON_LEFT")
-
-const navigatorShare = !!navigator.share
 
 const currentUser = useReadonlyStream(currentUser$, null)
 
@@ -254,24 +136,6 @@ watch(
   }
 )
 
-const nativeShare = () => {
-  if (navigator.share) {
-    navigator
-      .share({
-        title: "Hoppscotch",
-        text: "Hoppscotch • Open source API development ecosystem - Helps you create requests faster, saving precious time on development.",
-        url: "https://hoppscotch.io",
-      })
-      .catch(console.error)
-  } else {
-    // fallback
-  }
-}
-
-const chatWithUs = () => {
-  showChat()
-}
-
 const showDeveloperOptionModal = () => {
   if (currentUser.value) {
     showDeveloperOptions.value = true
@@ -281,6 +145,4 @@ const showDeveloperOptionModal = () => {
 // Template refs
 const tippyActions = ref<TippyComponent | null>(null)
 const documentation = ref<typeof SmartItem | null>(null)
-const shortcuts = ref<typeof SmartItem | null>(null)
-const chat = ref<typeof SmartItem | null>(null)
 </script>
