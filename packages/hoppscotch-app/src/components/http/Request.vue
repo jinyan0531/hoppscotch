@@ -177,23 +177,6 @@
                   class="mb-2 input !bg-primaryContrast"
                   @keyup.enter="hide()"
                 />
-                <SmartItem
-                  ref="copyRequestAction"
-                  :label="shareButtonText"
-                  :icon="copyLinkIcon"
-                  :loading="fetchingShareLink"
-                  :shortcut="['C']"
-                  @click="
-                    () => {
-                      copyRequest()
-                    }
-                  "
-                />
-                <SmartItem
-                  :icon="IconLink2"
-                  :label="`${t('request.view_my_links')}`"
-                  to="/profile"
-                />
                 <hr />
                 <SmartItem
                   ref="saveRequestAction"
@@ -239,7 +222,6 @@ import IconCode2 from "~icons/lucide/code-2"
 import IconRotateCCW from "~icons/lucide/rotate-ccw"
 import IconSave from "~icons/lucide/save"
 import IconChevronDown from "~icons/lucide/chevron-down"
-import IconLink2 from "~icons/lucide/link-2"
 import IconFolderPlus from "~icons/lucide/folder-plus"
 import { computed, ref, watch } from "vue"
 import { isLeft, isRight } from "fp-ts/lib/Either"
@@ -426,17 +408,6 @@ const copyLinkIcon = refAutoReset<
 
 const shareLink = ref<string | null>("")
 const fetchingShareLink = ref(false)
-
-const shareButtonText = computed(() => {
-  if (shareLink.value) {
-    return shareLink.value
-  } else if (fetchingShareLink.value) {
-    return t("state.loading")
-  } else {
-    return t("request.copy_link")
-  }
-})
-
 const request = useReadonlyStream(restRequest$, getRESTRequest())
 
 watch(request, () => {
