@@ -187,7 +187,7 @@
     "deleted": "环境已删除",
     "edit": "编辑环境",
     "invalid_name": "请提供有效的环境名称",
-    "my_environments": "My Environments",
+    "my_environments": "常量配置",
     "nested_overflow": "环境嵌套深度超过限制（10层）",
     "new": "新建环境",
     "no_environment": "无环境",

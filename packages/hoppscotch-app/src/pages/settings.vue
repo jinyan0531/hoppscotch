@@ -159,58 +159,6 @@
               </div>
             </div>
           </section>
-          <section>
-            <h4 class="font-semibold text-secondaryDark">
-              {{ t("settings.proxy") }}
-            </h4>
-            <div class="my-1 text-secondaryLight">
-              {{
-                `${t("settings.official_proxy_hosting")} ${t(
-                  "settings.read_the"
-                )}`
-              }}
-              <SmartAnchor
-                class="link"
-                to="https://docs.hoppscotch.io/privacy"
-                blank
-                :label="t('app.proxy_privacy_policy')"
-              />.
-            </div>
-            <div class="py-4 space-y-4">
-              <div class="flex items-center">
-                <SmartToggle
-                  :on="PROXY_ENABLED"
-                  @change="toggleInterceptor('proxy')"
-                >
-                  {{ t("settings.proxy_use_toggle") }}
-                </SmartToggle>
-              </div>
-            </div>
-            <div class="flex items-center py-4 space-x-2">
-              <div class="relative flex flex-col flex-1">
-                <input
-                  id="url"
-                  v-model="PROXY_URL"
-                  class="input floating-input"
-                  placeholder=" "
-                  type="url"
-                  autocomplete="off"
-                  :disabled="!PROXY_ENABLED"
-                />
-                <label for="url">
-                  {{ t("settings.proxy_url") }}
-                </label>
-              </div>
-              <ButtonSecondary
-                v-tippy="{ theme: 'tooltip' }"
-                :title="t('settings.reset_default')"
-                :icon="clearIcon"
-                outline
-                class="rounded"
-                @click="resetProxy"
-              />
-            </div>
-          </section>
         </div>
       </div>
     </div>
@@ -234,13 +182,9 @@
 import IconChrome from "~icons/brands/chrome"
 import IconCheckCircle from "~icons/lucide/check-circle"
 import IconFirefox from "~icons/brands/firefox"
-import IconRotateCCW from "~icons/lucide/rotate-ccw"
-import IconCheck from "~icons/lucide/check"
 import { ref, computed, watch } from "vue"
-import { refAutoReset } from "@vueuse/core"
 import { applySetting, toggleSetting } from "~/newstore/settings"
 import { useSetting } from "@composables/settings"
-import { useToast } from "@composables/toast"
 import { useI18n } from "@composables/i18n"
 import { useColorMode } from "@composables/theming"
 import { useReadonlyStream } from "@composables/stream"
@@ -250,7 +194,6 @@ import { extensionStatus$ } from "~/newstore/HoppExtension"
 import { usePageHead } from "@composables/head"
 
 const t = useI18n()
-const toast = useToast()
 const colorMode = useColorMode()
 
 usePageHead({
@@ -280,11 +223,6 @@ const hasChromeExtInstalled = computed(
 
 const hasFirefoxExtInstalled = computed(
   () => browserIsFirefox() && currentExtensionStatus.value === "available"
-)
-
-const clearIcon = refAutoReset<typeof IconRotateCCW | typeof IconCheck>(
-  IconRotateCCW,
-  1000
 )
 
 const confirmRemove = ref(false)
@@ -325,12 +263,6 @@ const toggleInterceptor = (interceptor: "extension" | "proxy") => {
 const showConfirmModal = () => {
   if (TELEMETRY_ENABLED.value) confirmRemove.value = true
   else toggleSetting("TELEMETRY_ENABLED")
-}
-
-const resetProxy = () => {
-  applySetting("PROXY_URL", `https://proxy.hoppscotch.io/`)
-  clearIcon.value = IconCheck
-  toast.success(`${t("state.cleared")}`)
 }
 
 const getColorModeName = (colorMode: string) => {

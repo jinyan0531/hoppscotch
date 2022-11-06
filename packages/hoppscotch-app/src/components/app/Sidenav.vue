@@ -3,6 +3,7 @@
     <nav class="flex flex-1 flex-nowrap md:flex-col md:flex-none bg-primary">
       <SmartLink
         v-for="(navigation, index) in primaryNavigation"
+        v-show="navigation.show"
         :key="`navigation-${index}`"
         v-tippy="{
           theme: 'tooltip',
@@ -47,24 +48,28 @@ const primaryNavigation = [
     svg: IconLink2,
     title: "navigation.rest",
     exact: true,
+    show: true,
   },
   {
     target: "/graphql",
     svg: IconGraphql,
     title: "navigation.graphql",
     exact: false,
+    show: false,
   },
   {
     target: "/realtime",
     svg: IconGlobe,
     title: "navigation.realtime",
     exact: false,
+    show: false,
   },
   {
     target: "/settings",
     svg: IconSettings,
     title: "navigation.settings",
     exact: false,
+    show: true,
   },
 ]
 </script>

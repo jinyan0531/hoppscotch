@@ -12,13 +12,6 @@
       <div class="flex">
         <ButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
-          to="https://docs.hoppscotch.io/features/environments"
-          blank
-          :title="t('app.wiki')"
-          :icon="IconHelpCircle"
-        />
-        <ButtonSecondary
-          v-tippy="{ theme: 'tooltip' }"
           :icon="IconArchive"
           :title="t('modal.import_export')"
           @click="displayModalImportExport(true)"
@@ -76,7 +69,6 @@ import { useReadonlyStream } from "@composables/stream"
 import { useI18n } from "~/composables/i18n"
 import IconArchive from "~icons/lucide/archive"
 import IconPlus from "~icons/lucide/plus"
-import IconHelpCircle from "~icons/lucide/help-circle"
 import { Environment } from "@hoppscotch/data"
 import { defineActionHandler } from "~/helpers/actions"
 

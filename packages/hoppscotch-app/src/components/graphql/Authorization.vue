@@ -229,14 +229,6 @@
         <div class="pb-2 text-secondaryLight">
           {{ t("helpers.authorization") }}
         </div>
-        <SmartAnchor
-          class="link"
-          :label="t('authorization.learn')"
-          :icon="IconExternalLink"
-          to="https://docs.hoppscotch.io/features/authorization"
-          blank
-          reverse
-        />
       </div>
     </div>
   </div>

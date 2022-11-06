@@ -184,15 +184,6 @@
       <span class="pb-4 text-center">
         {{ t("helpers.tests") }}
       </span>
-      <ButtonSecondary
-        outline
-        :label="`${t('action.learn_more')}`"
-        to="https://docs.hoppscotch.io/features/tests"
-        blank
-        :icon="IconExternalLink"
-        reverse
-        class="my-4"
-      />
     </div>
     <EnvironmentsMyDetails
       :show="showModalDetails"
@@ -218,7 +209,6 @@ import { restTestResults$, setRESTTestResults } from "~/newstore/RESTSession"
 import { HoppTestResult } from "~/helpers/types/HoppTestResult"
 
 import IconTrash2 from "~icons/lucide/trash-2"
-import IconExternalLink from "~icons/lucide/external-link"
 import IconAlertTriangle from "~icons/lucide/alert-triangle"
 import IconCheck from "~icons/lucide/check"
 import IconClose from "~icons/lucide/x"
