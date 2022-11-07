@@ -64,21 +64,12 @@
           </div>
         </div>
       </div>
-      <ButtonSecondary
-        :label="`${t('app.documentation')}`"
-        to="https://docs.hoppscotch.io/features/response"
-        :icon="IconExternalLink"
-        blank
-        outline
-        reverse
-      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import IconWrapText from "~icons/lucide/wrap-text"
-import IconExternalLink from "~icons/lucide/external-link"
 import IconDownload from "~icons/lucide/download"
 import IconCheck from "~icons/lucide/check"
 import IconCopy from "~icons/lucide/copy"

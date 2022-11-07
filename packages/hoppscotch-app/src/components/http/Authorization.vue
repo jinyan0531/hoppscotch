@@ -121,15 +121,6 @@
         :alt="`${t('empty.authorization')}`"
       />
       <span class="pb-4 text-center">{{ t("empty.authorization") }}</span>
-      <ButtonSecondary
-        outline
-        :label="t('app.documentation')"
-        to="https://docs.hoppscotch.io/features/authorization"
-        blank
-        :icon="IconExternalLink"
-        reverse
-        class="mb-4"
-      />
     </div>
     <div v-else class="flex flex-1 border-b border-dividerLight">
       <div class="w-2/3 border-r border-dividerLight">
@@ -234,7 +225,6 @@
 <script setup lang="ts">
 import IconHelpCircle from "~icons/lucide/help-circle"
 import IconTrash2 from "~icons/lucide/trash-2"
-import IconExternalLink from "~icons/lucide/external-link"
 import IconCircleDot from "~icons/lucide/circle-dot"
 import IconCircle from "~icons/lucide/circle"
 import { computed, ref, Ref } from "vue"

@@ -109,15 +109,6 @@
         :alt="`${t('empty.body')}`"
       />
       <span class="pb-4 text-center">{{ t("empty.body") }}</span>
-      <ButtonSecondary
-        outline
-        :label="`${t('app.documentation')}`"
-        to="https://docs.hoppscotch.io/features/body"
-        blank
-        :icon="IconExternalLink"
-        reverse
-        class="mb-4"
-      />
     </div>
   </div>
 </template>
@@ -126,7 +117,6 @@
 import IconDone from "~icons/lucide/check"
 import IconInfo from "~icons/lucide/info"
 import IconRefreshCW from "~icons/lucide/refresh-cw"
-import IconExternalLink from "~icons/lucide/external-link"
 import { computed, ref } from "vue"
 import { pipe } from "fp-ts/function"
 import * as A from "fp-ts/Array"

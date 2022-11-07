@@ -39,11 +39,6 @@
         <div class="pb-2 text-secondaryLight">
           {{ t("helpers.post_request_tests") }}
         </div>
-        <SmartAnchor
-          :label="`${t('test.learn')}`"
-          to="https://docs.hoppscotch.io/features/tests"
-          blank
-        />
         <h4 class="pt-6 font-bold text-secondaryLight">
           {{ t("test.snippets") }}
         </h4>
