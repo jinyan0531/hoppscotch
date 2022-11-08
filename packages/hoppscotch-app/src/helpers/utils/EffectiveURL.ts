@@ -73,6 +73,12 @@ const getComputedAuthHeaders = (
       key: "Authorization",
       value: `Bearer ${parseTemplateString(req.auth.token, envVars)}`,
     })
+  } else if (req.auth.authType === "common") {
+    headers.push({
+      active: true,
+      key: "jwt_sso_token",
+      value: `${parseTemplateString(req.auth.token, envVars)}`,
+    })
   } else if (req.auth.authType === "api-key") {
     const { key, value, addTo } = req.auth
 

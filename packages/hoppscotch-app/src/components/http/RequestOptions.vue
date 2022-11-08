@@ -40,6 +40,13 @@
     >
       <HttpTests />
     </SmartTab>
+    <SmartTab
+      :id="'rule'"
+      :label="`${t('tab.rule')}`"
+      :indicator="testScript && testScript.length > 0 ? true : false"
+    >
+      <RuleEdit />
+    </SmartTab>
   </SmartTabs>
 </template>
 

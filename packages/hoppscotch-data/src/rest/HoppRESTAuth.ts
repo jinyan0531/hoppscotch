@@ -15,6 +15,13 @@ export type HoppRESTAuthBearer = {
   token: string
 }
 
+
+export type HoppRESTAuthCommon = {
+  authType: "common"
+
+  token: string
+}
+
 export type HoppRESTAuthOAuth2 = {
   authType: "oauth-2"
 
@@ -40,4 +47,5 @@ export type HoppRESTAuth = { authActive: boolean } & (
   | HoppRESTAuthBearer
   | HoppRESTAuthOAuth2
   | HoppRESTAuthAPIKey
+  | HoppRESTAuthCommon
 )

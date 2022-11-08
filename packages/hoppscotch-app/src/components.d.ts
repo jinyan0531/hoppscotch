@@ -121,6 +121,7 @@ declare module '@vue/runtime-core' {
     RealtimeCommunication: typeof import('./components/realtime/Communication.vue')['default']
     RealtimeLog: typeof import('./components/realtime/Log.vue')['default']
     RealtimeLogEntry: typeof import('./components/realtime/LogEntry.vue')['default']
+    RuleRuleEdit: typeof import('./components/rule/RuleEdit.vue')['default']
     SmartAccentModePicker: typeof import('./components/smart/AccentModePicker.vue')['default']
     SmartAnchor: typeof import('./components/smart/Anchor.vue')['default']
     SmartAutoComplete: typeof import('./components/smart/AutoComplete.vue')['default']

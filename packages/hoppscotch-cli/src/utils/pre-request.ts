@@ -114,7 +114,7 @@ export function getEffectiveRESTRequest(
           envVariables
         )}`,
       });
-    } else if (request.auth.authType === "api-key") {
+    }  else if (request.auth.authType === "api-key") {
       const { key, value, addTo } = request.auth;
       if (addTo === "Headers") {
         effectiveFinalHeaders.push({
@@ -129,6 +129,15 @@ export function getEffectiveRESTRequest(
           value: parseTemplateString(value, envVariables),
         });
       }
+     } else if (request.auth.authType === "common") {
+        effectiveFinalHeaders.push({
+          active: true,
+          key: "Authorization",
+          value: `${parseTemplateString(
+            request.auth.token,
+            envVariables
+          )}`,
+      });
     }
   }
 

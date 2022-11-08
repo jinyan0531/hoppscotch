@@ -614,6 +614,7 @@
     "socketio": "Socket.IO",
     "sse": "SSE",
     "tests": "测试",
+    "rule": "规则",
     "types": "类型",
     "variables": "变量",
     "websocket": "WebSocket"

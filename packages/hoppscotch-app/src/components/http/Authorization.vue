@@ -57,6 +57,17 @@
                 "
               />
               <SmartItem
+                label="Common Token"
+                :icon="authName === 'Common' ? IconCircleDot : IconCircle"
+                :active="authName === 'Common'"
+                @click="
+                  () => {
+                    authType = 'common'
+                    hide()
+                  }
+                "
+              />
+              <SmartItem
                 label="OAuth 2.0"
                 :icon="authName === 'OAuth 2.0' ? IconCircleDot : IconCircle"
                 :active="authName === 'OAuth 2.0'"
@@ -97,13 +108,6 @@
         >
         <ButtonSecondary
           v-tippy="{ theme: 'tooltip' }"
-          to="https://docs.hoppscotch.io/features/authorization"
-          blank
-          :title="t('app.wiki')"
-          :icon="IconHelpCircle"
-        />
-        <ButtonSecondary
-          v-tippy="{ theme: 'tooltip' }"
           :title="t('action.clear')"
           :icon="IconTrash2"
           @click="clearContent"
@@ -141,6 +145,11 @@
         <div v-if="authType === 'bearer'">
           <div class="flex flex-1 border-b border-dividerLight">
             <SmartEnvInput v-model="bearerToken" placeholder="Token" />
+          </div>
+        </div>
+        <div v-if="authType === 'common'">
+          <div class="flex flex-1 border-b border-dividerLight">
+            <SmartEnvInput v-model="commonToken" placeholder="Token" />
           </div>
         </div>
         <div v-if="authType === 'oauth-2'">
@@ -223,7 +232,6 @@
 </template>
 
 <script setup lang="ts">
-import IconHelpCircle from "~icons/lucide/help-circle"
 import IconTrash2 from "~icons/lucide/trash-2"
 import IconCircleDot from "~icons/lucide/circle-dot"
 import IconCircle from "~icons/lucide/circle"
@@ -231,6 +239,7 @@ import { computed, ref, Ref } from "vue"
 import {
   HoppRESTAuthBasic,
   HoppRESTAuthBearer,
+  HoppRESTAuthCommon,
   HoppRESTAuthOAuth2,
   HoppRESTAuthAPIKey,
 } from "@hoppscotch/data"
@@ -253,6 +262,7 @@ const authType = pluckRef(auth, "authType")
 const authName = computed(() => {
   if (authType.value === "basic") return "Basic Auth"
   else if (authType.value === "bearer") return "Bearer"
+  else if (authType.value === "common") return "Common"
   else if (authType.value === "oauth-2") return "OAuth 2.0"
   else if (authType.value === "api-key") return "API key"
   else return "None"
@@ -261,6 +271,7 @@ const authActive = pluckRef(auth, "authActive")
 const basicUsername = pluckRef(auth as Ref<HoppRESTAuthBasic>, "username")
 const basicPassword = pluckRef(auth as Ref<HoppRESTAuthBasic>, "password")
 const bearerToken = pluckRef(auth as Ref<HoppRESTAuthBearer>, "token")
+const commonToken = pluckRef(auth as Ref<HoppRESTAuthCommon>, "token")
 const oauth2Token = pluckRef(auth as Ref<HoppRESTAuthOAuth2>, "token")
 const apiKey = pluckRef(auth as Ref<HoppRESTAuthAPIKey>, "key")
 const apiValue = pluckRef(auth as Ref<HoppRESTAuthAPIKey>, "value")
