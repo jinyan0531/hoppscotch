@@ -31,8 +31,9 @@ export type SettingsType = {
   syncCollections: boolean
   syncHistory: boolean
   syncEnvironments: boolean
-
+  CENTER_URL: string
   PROXY_ENABLED: boolean
+  DEFAULT_CENTER: boolean
   PROXY_URL: string
   EXTENSIONS_ENABLED: boolean
   URL_EXCLUDES: {
@@ -57,7 +58,8 @@ export const defaultSettings: SettingsType = {
   syncCollections: true,
   syncHistory: true,
   syncEnvironments: true,
-
+  DEFAULT_CENTER: false,
+  CENTER_URL: "https://kp.tuolong56.com/",
   PROXY_ENABLED: false,
   PROXY_URL: "https://proxy.hoppscotch.io/",
   EXTENSIONS_ENABLED: false,

@@ -222,10 +222,15 @@
       </div>
       <div
         class="sticky h-full p-4 overflow-auto bg-primary top-upperTertiaryStickyFold min-w-46 max-w-1/3 z-9"
+        style="flex-wrap: nowrap"
       >
         <div class="pb-2 text-secondaryLight">
           {{ t("helpers.authorization") }}
         </div>
+        <SmartEnvInput placeholder="用户ID" />
+        <button aria-label="button" role="button" onclick="alert('2222')">
+          拉取
+        </button>
       </div>
     </div>
   </div>
