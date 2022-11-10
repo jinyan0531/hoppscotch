@@ -336,7 +336,6 @@ function setupRequestPersistence() {
 
 export function setupLocalPersistence() {
   checkAndMigrateOldSettings()
-
   setupLocalStatePersistence()
   setupSettingsPersistence()
   setupRequestPersistence()

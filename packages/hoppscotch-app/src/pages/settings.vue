@@ -149,7 +149,7 @@
         <div class="p-8 space-y-8 md:col-span-2">
           <section>
             <h4 class="font-semibold text-secondaryDark">
-              {{ t("settings.proxy") }}
+              {{ t("settings.data_center") }}
             </h4>
             <div class="py-4 space-y-4">
               <div class="flex items-center">

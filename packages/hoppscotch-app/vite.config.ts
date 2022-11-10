@@ -28,6 +28,18 @@ export default defineConfig({
   },
   server: {
     port: 3000,
+    proxy: {
+      "/esb2-api/authorize/authLogin": {
+        target: "https://tlwl.uat.tuolong56.com",
+        // 是否允许跨域
+        ws: true,
+        secure: true,
+        changeOrigin: true,
+        pathRewrite: {
+          "^/esb2-api/authorize/authLogin": "/esb2-api/authorize/authLogin",
+        },
+      },
+    },
   },
   preview: {
     port: 3000,

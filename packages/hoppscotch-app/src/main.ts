@@ -23,12 +23,3 @@ initUserInfo()
 HOPP_MODULES.forEach((mod) => mod.onVueAppInit?.(app))
 
 app.mount("#app")
-
-console.info(
-  "%cWe ❤︎ open source!",
-  "background-color:white;padding:8px 16px;border-radius:8px;font-size:32px;color:red;"
-)
-console.info(
-  "%cContribute: https://github.com/hoppscotch/hoppscotch",
-  "background-color:black;padding:4px 8px;border-radius:8px;font-size:16px;color:white;"
-)

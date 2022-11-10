@@ -9,27 +9,14 @@
     <template #body>
       <div v-if="mode === 'sign-in'" class="flex flex-col space-y-2">
         <SmartItem
-          :loading="signingInWithGitHub"
-          :icon="IconGithub"
-          :label="`${t('auth.continue_with_github')}`"
-          @click="signInWithGithub"
-        />
-        <SmartItem
-          :loading="signingInWithGoogle"
-          :icon="IconGoogle"
-          :label="`${t('auth.continue_with_google')}`"
-          @click="signInWithGoogle"
-        />
-        <SmartItem
-          :loading="signingInWithMicrosoft"
-          :icon="IconMicrosoft"
-          :label="`${t('auth.continue_with_microsoft')}`"
-          @click="signInWithMicrosoft"
-        />
-        <SmartItem
           :icon="IconEmail"
           :label="`${t('auth.continue_with_email')}`"
           @click="mode = 'email'"
+        />
+        <SmartItem
+          :icon="IconLogin"
+          :label="`${t('auth.continue_with_user')}`"
+          @click="mode = 'user'"
         />
       </div>
       <form
@@ -61,6 +48,53 @@
           :label="`${t('auth.send_magic_link')}`"
         />
       </form>
+      <form
+        v-if="mode === 'user'"
+        class="flex flex-col space-y-2"
+        @submit.prevent="signInWithUser"
+      >
+        <div class="flex flex-col">
+          <input
+            id="user_id"
+            v-model="form.user_id"
+            v-focus
+            class="input floating-input"
+            placeholder=" "
+            type="text"
+            name="user_id"
+            autocomplete="off"
+            required
+            spellcheck="false"
+            autofocus
+          />
+          <label for="user_id">
+            {{ t("auth.user_id") }}
+          </label>
+        </div>
+        <div class="flex flex-col">
+          <input
+            id="password"
+            v-model="form.password"
+            v-focus
+            class="input floating-input"
+            placeholder=" "
+            type="password"
+            name="password"
+            autocomplete="off"
+            required
+            spellcheck="false"
+            autofocus
+          />
+          <label for="password">
+            {{ t("auth.password") }}
+          </label>
+        </div>
+        <ButtonPrimary
+          :loading="signingInWithUser"
+          type="submit"
+          :label="`${t('auth.send_login')}`"
+        />
+      </form>
       <div v-if="mode === 'email-sent'" class="flex flex-col px-4">
         <div class="flex flex-col items-center justify-center max-w-md">
           <icon-lucide-inbox class="w-6 h-6 text-accent" />
@@ -70,6 +104,19 @@
           <p class="text-center">
             {{
               t("auth.we_sent_magic_link_description", { email: form.email })
+            }}
+          </p>
+        </div>
+      </div>
+      <div v-if="mode === 'user-sent'" class="flex flex-col px-4">
+        <div class="flex flex-col items-center justify-center max-w-md">
+          <icon-lucide-inbox class="w-6 h-6 text-accent" />
+          <h3 class="my-2 text-lg text-center">
+            {{ t("auth.we_sent_magic_link") }}
+          </h3>
+          <p class="text-center">
+            {{
+              t("auth.we_sent_user_link_description", { user_id: form.user_id })
             }}
           </p>
         </div>
@@ -100,6 +147,14 @@
           @click="mode = 'sign-in'"
         />
       </div>
+      <div v-if="mode === 'user'">
+        <ButtonSecondary
+          :label="t('auth.all_sign_in_options')"
+          :icon="IconArrowLeft"
+          class="!p-0"
+          @click="mode = 'sign-in'"
+        />
+      </div>
       <div
         v-if="mode === 'email-sent'"
         class="flex justify-between flex-1 text-secondaryLight"
@@ -110,10 +165,16 @@
           :icon="IconArrowLeft"
           @click="mode = 'email'"
         />
+      </div>
+      <div
+        v-if="mode === 'user-sent'"
+        class="flex justify-between flex-1 text-secondaryLight"
+      >
         <SmartAnchor
           class="link"
-          :label="`${t('action.dismiss')}`"
-          @click="hideModal"
+          :label="t('auth.re_enter_user_id')"
+          :icon="IconArrowLeft"
+          @click="mode = 'user'"
         />
       </div>
     </template>
@@ -122,22 +183,13 @@
 
 <script lang="ts">
 import { defineComponent } from "vue"
-import {
-  signInUserWithGoogle,
-  signInUserWithGithub,
-  signInUserWithMicrosoft,
-  setProviderInfo,
-  currentUser$,
-  signInWithEmail,
-  linkWithFBCredentialFromAuthError,
-  getGithubCredentialFromResult,
-} from "~/helpers/fb/auth"
-import IconGithub from "~icons/auth/github"
-import IconGoogle from "~icons/auth/google"
+import { currentUser$, signInWithEmail } from "~/helpers/fb/auth"
 import IconEmail from "~icons/auth/email"
-import IconMicrosoft from "~icons/auth/microsoft"
+import IconLogin from "~icons/auth/denglu"
 import IconArrowLeft from "~icons/lucide/arrow-left"
 import { setLocalConfig } from "~/newstore/localpersistence"
+import { request } from "~/helpers/utils/RequestUtils"
+import { AxiosRequestConfig } from "axios"
 import { useStreamSubscriber } from "@composables/stream"
 import { useToast } from "@composables/toast"
 import { useI18n } from "@composables/i18n"
@@ -154,22 +206,23 @@ export default defineComponent({
       subscribeToStream,
       t: useI18n(),
       toast: useToast(),
-      IconGithub,
-      IconGoogle,
       IconEmail,
-      IconMicrosoft,
       IconArrowLeft,
+      IconLogin,
     }
   },
   data() {
     return {
       form: {
         email: "",
+        user_id: "",
+        password: "",
       },
       signingInWithGoogle: false,
       signingInWithGitHub: false,
       signingInWithMicrosoft: false,
       signingInWithEmail: false,
+      signingInWithUser: false,
       mode: "sign-in",
     }
   },
@@ -181,80 +234,6 @@ export default defineComponent({
   methods: {
     showLoginSuccess() {
       this.toast.success(`${this.t("auth.login_success")}`)
-    },
-    async signInWithGoogle() {
-      this.signingInWithGoogle = true
-
-      try {
-        await signInUserWithGoogle()
-        this.showLoginSuccess()
-      } catch (e) {
-        console.error(e)
-        /*
-        A auth/account-exists-with-different-credential Firebase error wont happen between Google and any other providers
-        Seems Google account overwrites accounts of other providers https://github.com/firebase/firebase-android-sdk/issues/25
-        */
-        this.toast.error(`${this.t("error.something_went_wrong")}`)
-      }
-
-      this.signingInWithGoogle = false
-    },
-    async signInWithGithub() {
-      this.signingInWithGitHub = true
-
-      try {
-        const result = await signInUserWithGithub()
-        const credential = getGithubCredentialFromResult(result)!
-        const token = credential.accessToken
-        setProviderInfo(result.providerId!, token!)
-
-        this.showLoginSuccess()
-      } catch (e) {
-        console.error(e)
-        // This user's email is already present in Firebase but with other providers, namely Google or Microsoft
-        if (
-          (e as any).code === "auth/account-exists-with-different-credential"
-        ) {
-          this.toast.info(`${this.t("auth.account_exists")}`, {
-            duration: 0,
-            closeOnSwipe: false,
-            action: {
-              text: `${this.t("action.yes")}`,
-              onClick: async (_, toastObject) => {
-                await linkWithFBCredentialFromAuthError(e)
-                this.showLoginSuccess()
-
-                toastObject.goAway(0)
-              },
-            },
-          })
-        } else {
-          this.toast.error(`${this.t("error.something_went_wrong")}`)
-        }
-      }
-
-      this.signingInWithGitHub = false
-    },
-    async signInWithMicrosoft() {
-      this.signingInWithMicrosoft = true
-
-      try {
-        await signInUserWithMicrosoft()
-        this.showLoginSuccess()
-      } catch (e) {
-        console.error(e)
-        /*
-        A auth/account-exists-with-different-credential Firebase error wont happen between MS with Google or Github
-        If a Github account exists and user then logs in with MS email we get a "Something went wrong toast" and console errors and MS replaces GH as only provider.
-        The error messages are as follows:
-            FirebaseError: Firebase: Error (auth/popup-closed-by-user).
-            @firebase/auth: Auth (9.6.11): INTERNAL ASSERTION FAILED: Pending promise was never set
-        They may be related to https://github.com/firebase/firebaseui-web/issues/947
-        */
-        this.toast.error(`${this.t("error.something_went_wrong")}`)
-      }
-
-      this.signingInWithMicrosoft = false
     },
     async signInWithEmail() {
       this.signingInWithEmail = true
@@ -275,6 +254,32 @@ export default defineComponent({
         })
         .finally(() => {
           this.signingInWithEmail = false
+        })
+    },
+    async signInWithUser() {
+      this.signingInWithUser = true
+      const loginConfig = {
+        url: "/esb2-api/authorize/authLogin",
+        params: { subject_id: "T1092", secret: "QD6i6FG5qwSplr6rSkgKMA==1" },
+      } as AxiosRequestConfig
+      request(loginConfig, false)
+        .then((res) => {
+          const msg = JSON.parse(res.serviceRspData)
+          if (msg.errorCode !== 0) {
+            alert(msg.msg)
+            this.signingInWithUser = false
+          } else {
+            this.mode = "user-sent"
+            console.info(JSON.parse(res.serviceRspData))
+          }
+        })
+        .catch((e) => {
+          console.info(e)
+          this.signingInWithUser = false
+        })
+        .finally(() => {
+          console.info("完成")
+          this.signingInWithUser = false
         })
     },
     hideModal() {

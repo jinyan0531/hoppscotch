@@ -1,10 +1,9 @@
 import parser from "yargs-parser"
-import * as cookie from "cookie"
 import * as O from "fp-ts/Option"
 import * as S from "fp-ts/string"
 import { pipe, flow } from "fp-ts/function"
 import { objHasProperty } from "~/helpers/functional/object"
-
+import Cookies from "js-cookie"
 export function getCookies(parsedArguments: parser.Arguments) {
   return pipe(
     parsedArguments,
@@ -24,4 +23,7 @@ export function getCookies(parsedArguments: parser.Arguments) {
 
     O.getOrElse(() => ({}))
   )
+}
+export function getCookie(name: string) {
+  return Cookies.get(name)
 }

@@ -49,7 +49,6 @@ export default <HoppModule>{
 
     router.beforeEach((to, from) => {
       _isLoadingInitialRoute.value = isInitialRoute(from)
-
       HOPP_MODULES.forEach((mod) => {
         mod.onBeforeRouteChange?.(to, from, router)
       })
